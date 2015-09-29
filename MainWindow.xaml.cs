@@ -15,7 +15,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
-    /// check updated
+    /// check updated branch 2
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
