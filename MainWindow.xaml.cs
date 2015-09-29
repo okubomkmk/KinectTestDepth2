@@ -288,5 +288,10 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
+
+        private void Image_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            MessageBox.Show("test");
+        }
     }
 }
