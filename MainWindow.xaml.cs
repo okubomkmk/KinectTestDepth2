@@ -94,6 +94,11 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+         
+
+            
+                
         }
 
         /// <summary>
@@ -252,7 +257,14 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         {
             // depth frame data is a 16 bit value
             ushort* frameData = (ushort*)depthFrameData;
-
+            if (Viewbox1.IsMouseOver)
+            {
+                this.StatusText = ("over");
+            }
+            else
+            {
+                this.StatusText = ("not over");
+            }
             // convert depth to a visual representation
             for (int i = 0; i < (int)(depthFrameDataSize / this.depthFrameDescription.BytesPerPixel); ++i)
             {
@@ -289,9 +301,5 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
 
-        private void Viewbox_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            MessageBox.Show("test");
-        }
     }
 }
