@@ -288,5 +288,10 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
+
+        private void Viewbox_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MessageBox.Show("test");
+        }
     }
 }

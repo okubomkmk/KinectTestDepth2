@@ -48,8 +48,8 @@
     <TextBlock Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Depth Basics</TextBlock>
     <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
 
-    <Viewbox Grid.Row="1" HorizontalAlignment="Center">
-      <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+    <Viewbox Grid.Row="1" HorizontalAlignment="Center" MouseLeftButtonDown="Viewbox_MouseLeftButtonDown">
+      <Image Source="{Binding ImageSource}" Stretch="UniformToFill" Cursor="Cross"/>
     </Viewbox>
       
     <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 10 0 10" Click="ScreenshotButton_Click" />
