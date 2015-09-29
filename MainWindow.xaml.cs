@@ -12,6 +12,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
     using System.Globalization;
     using System.IO;
     using System.Windows;
+    using System.Windows.Forms;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
@@ -94,6 +95,8 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+
 
          
 
@@ -255,12 +258,16 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// <param name="maxDepth">The maximum reliable depth value for the frame</param>
         private unsafe void ProcessDepthFrameData(IntPtr depthFrameData, uint depthFrameDataSize, ushort minDepth, ushort maxDepth)
         {
+            int mouse_x = System.Windows.Forms.Cursor.Position.X;
+            int mouse_y = System.Windows.Forms.Cursor.Position.Y;
+
             // depth frame data is a 16 bit value
             ushort* frameData = (ushort*)depthFrameData;
             if (Viewbox1.IsMouseOver)
             {
-                this.StatusText = ("over");
+                this.StatusText = (mouse_x.ToString() + " " + mouse_y.ToString());
             }
+
             else
             {
                 this.StatusText = ("not over");
@@ -300,6 +307,5 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
-
     }
 }
