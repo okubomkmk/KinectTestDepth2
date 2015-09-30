@@ -37,6 +37,11 @@
         </Style>
     </Window.Resources>
     <Grid Margin="10 0 10 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="165*"/>
+            <ColumnDefinition Width="85*"/>
+            <ColumnDefinition Width="422*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -44,17 +49,17 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0 10 0 5" />
-        <TextBlock Grid.Row="0" Margin="0 0 -1 0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18">Depth Basics</TextBlock>
-        <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="0 0 0 5" />
+        <Image Grid.Row="0" Source="Images\Logo.png" HorizontalAlignment="Left" Stretch="Fill" Height="32" Width="81" Margin="0,14,0,9" />
+        <TextBlock Grid.Row="0" Margin="0,31,-3,0" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{StaticResource MediumGreyBrush}" FontFamily="Segoe UI" FontSize="18" Grid.Column="2">Depth Basics</TextBlock>
+        <Image Grid.Row="0" Source="Images\Status.png" Stretch="None" HorizontalAlignment="Center" Margin="61,0,311,5" Grid.Column="2" />
 
-        <Viewbox Grid.Row="1" HorizontalAlignment="Center" Name="Viewbox1" Height="424" Width="512">
-            <Image Source="{Binding ImageSource}" Stretch="none" />
+        <Viewbox Grid.Row="1" HorizontalAlignment="Center" Name="Viewbox1" Height="424" Width="512" Grid.ColumnSpan="3" Margin="80,16">
+            <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
 
-        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 10 0 10" Click="ScreenshotButton_Click" />
+        <Button Grid.Row="2" Style="{StaticResource ScreenshotButton}" Content="Screenshot" Height="Auto" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,10" Click="ScreenshotButton_Click" Grid.Column="2" />
 
-        <StatusBar Grid.Row="3" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}">
+        <StatusBar Grid.Row="3" HorizontalAlignment="Stretch" Name="statusBar" VerticalAlignment="Bottom" Background="White" Foreground="{StaticResource MediumGreyBrush}" Grid.ColumnSpan="3">
             <StatusBarItem Content="{Binding StatusText}" />
         </StatusBar>
     </Grid>

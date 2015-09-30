@@ -299,12 +299,12 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         {
             
             Point p = this.Viewbox1.PointToScreen(new Point(0,0));
-            double mouse_y = System.Windows.Forms.Control.MousePosition.X - p.X;
-            double mouse_x = System.Windows.Forms.Control.MousePosition.Y - p.Y;
+            double mouse_x = System.Windows.Forms.Control.MousePosition.X - p.X;
+            double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y - 1;
             string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
 
-            ushort Value = Viewbox1.IsMouseOver ?  ProcessData[(int)(mouse_x * this.depthFrameDescription.Width+ mouse_y)] : (ushort)9000;
+            ushort Value = Viewbox1.IsMouseOver ?  ProcessData[(int)(mouse_y * this.depthFrameDescription.Width+ mouse_x)] : (ushort)9000;
 
             this.StatusText = Resolution + CursorLocation + " "+Value.ToString();
   
