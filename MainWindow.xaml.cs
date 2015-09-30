@@ -297,12 +297,13 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
         private void TextGenerate()
         {
-
-            int mouse_x = System.Windows.Forms.Cursor.Position.X;
-            int mouse_y = System.Windows.Forms.Cursor.Position.Y;
+            Point p = this.Viewbox1.PointToScreen(new Point(0,0));
+            double mouse_y = System.Windows.Forms.Control.MousePosition.X - p.X;
+            double mouse_x = System.Windows.Forms.Control.MousePosition.Y - p.Y;
             string Resolution = "Resolution " + this.depthFrameDescription.Height.ToString() + "x" + this.depthFrameDescription.Width.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
             this.StatusText = Resolution + CursorLocation;
+  
            
         }
     }
