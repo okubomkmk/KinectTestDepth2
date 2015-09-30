@@ -97,10 +97,6 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.InitializeComponent();
 
 
-
-         
-
-            
                 
         }
 
@@ -263,7 +259,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // depth frame data is a 16 bit value
             ushort* frameData = (ushort*)depthFrameData;
-            if (Viewbox1.IsMouseOver)
+            /*if (Viewbox1.IsMouseOver)
             {
                 this.StatusText = (mouse_x.ToString() + " " + mouse_y.ToString());
             }
@@ -271,7 +267,9 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             else
             {
                 this.StatusText = ("not over");
-            }
+            }*/
+
+            this.StatusText = this.depthFrameDescription.Height.ToString() + " " + this.depthFrameDescription.Width.ToString();
             // convert depth to a visual representation
             for (int i = 0; i < (int)(depthFrameDataSize / this.depthFrameDescription.BytesPerPixel); ++i)
             {
@@ -307,5 +305,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
+
+        
     }
 }
