@@ -254,22 +254,11 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// <param name="maxDepth">The maximum reliable depth value for the frame</param>
         private unsafe void ProcessDepthFrameData(IntPtr depthFrameData, uint depthFrameDataSize, ushort minDepth, ushort maxDepth)
         {
-            int mouse_x = System.Windows.Forms.Cursor.Position.X;
-            int mouse_y = System.Windows.Forms.Cursor.Position.Y;
 
             // depth frame data is a 16 bit value
             ushort* frameData = (ushort*)depthFrameData;
-            /*if (Viewbox1.IsMouseOver)
-            {
-                this.StatusText = (mouse_x.ToString() + " " + mouse_y.ToString());
-            }
-
-            else
-            {
-                this.StatusText = ("not over");
-            }*/
-
-            this.StatusText = this.depthFrameDescription.Height.ToString() + " " + this.depthFrameDescription.Width.ToString();
+            TextGenerate();
+           
             // convert depth to a visual representation
             for (int i = 0; i < (int)(depthFrameDataSize / this.depthFrameDescription.BytesPerPixel); ++i)
             {
@@ -306,6 +295,15 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
 
-        
+        private void TextGenerate()
+        {
+
+            int mouse_x = System.Windows.Forms.Cursor.Position.X;
+            int mouse_y = System.Windows.Forms.Cursor.Position.Y;
+            string Resolution = "Resolution " + this.depthFrameDescription.Height.ToString() + "x" + this.depthFrameDescription.Width.ToString();
+            string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
+            this.StatusText = Resolution + CursorLocation;
+           
+        }
     }
 }
