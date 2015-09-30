@@ -257,7 +257,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // depth frame data is a 16 bit value
             ushort* frameData = (ushort*)depthFrameData;
-            TextGenerate();
+            TextGenerate(frameData);
            
             // convert depth to a visual representation
             for (int i = 0; i < (int)(depthFrameDataSize / this.depthFrameDescription.BytesPerPixel); ++i)
@@ -295,14 +295,18 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                                                             : Properties.Resources.SensorNotAvailableStatusText;
         }
 
-        private void TextGenerate()
+        private unsafe void TextGenerate(ushort* ProcessData)
         {
+            
             Point p = this.Viewbox1.PointToScreen(new Point(0,0));
             double mouse_y = System.Windows.Forms.Control.MousePosition.X - p.X;
             double mouse_x = System.Windows.Forms.Control.MousePosition.Y - p.Y;
-            string Resolution = "Resolution " + this.depthFrameDescription.Height.ToString() + "x" + this.depthFrameDescription.Width.ToString();
+            string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
-            this.StatusText = Resolution + CursorLocation;
+
+            ushort Value = Viewbox1.IsMouseOver ?  ProcessData[(int)(mouse_x * this.depthFrameDescription.Width+ mouse_y)] : (ushort)9000;
+
+            this.StatusText = Resolution + CursorLocation + " "+Value.ToString();
   
            
         }
