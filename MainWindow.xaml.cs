@@ -3,10 +3,9 @@
 //     Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
 //------------------------------------------------------------------------------
+
 namespace Microsoft.Samples.Kinect.DepthBasics
 {
-    using Microsoft.Kinect;
-    using Microsoft.VisualStudio.GraphModel;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -14,11 +13,9 @@ namespace Microsoft.Samples.Kinect.DepthBasics
     using System.IO;
     using System.Windows;
     using System.Windows.Forms;
-    using System.Windows.Forms.DataVisualization.Charting;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-
-    
+    using Microsoft.Kinect;
     /// check updated
     /// <summary>
     /// Interaction logic for MainWindow
@@ -303,7 +300,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             
             Point p = this.Viewbox1.PointToScreen(new Point(0,0));
             double mouse_x = System.Windows.Forms.Control.MousePosition.X - p.X;
-            double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y;
+            double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y - 1;
             string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
 
@@ -313,6 +310,5 @@ namespace Microsoft.Samples.Kinect.DepthBasics
   
            
         }
-
     }
 }

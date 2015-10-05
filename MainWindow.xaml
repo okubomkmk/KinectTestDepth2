@@ -1,9 +1,8 @@
 ﻿<Window x:Class="Microsoft.Samples.Kinect.DepthBasics.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"   
-        Title="Depth Basics"
-        Height="600" 
-        Width="1200"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Depth Basics" 
+        Height="600" Width="900" 
         Closing="MainWindow_Closing">
     <Grid>
         
@@ -15,7 +14,6 @@
         <StatusBar HorizontalAlignment="Left" Height="25" Margin="20,470,0,0" VerticalAlignment="Top" Width="490">
             <StatusBarItem Content="{Binding StatusText}"/>
         </StatusBar>
-        <DataGrid HorizontalAlignment="Left" Height="100" Margin="275,695,0,-226" VerticalAlignment="Top"/>
 
 
     </Grid>
