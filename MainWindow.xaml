@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" x:Class="Microsoft.Samples.Kinect.DepthBasics.MainWindow"
         Title="Depth Basics" 
-        Height="600" Width="900" 
+        Height="672" Width="1144" 
         Closing="MainWindow_Closing">
     <Grid>
 
@@ -15,10 +15,16 @@
         </StatusBar>
 
 
-        <chartingToolkit:Chart HorizontalAlignment="Left" Height="435" Margin="510,50,0,0" VerticalAlignment="Top" Width="345" >
-            <chartingToolkit:LineSeries Name="DepthChart"/>
-        </chartingToolkit:Chart>
+        <chartingToolkit:Chart HorizontalAlignment="Left" Height="380" Margin="570,20,0,0" VerticalAlignment="Top" Width="546" >
+            <chartingToolkit:LineSeries Name="DepthChart" Margin="0,0,-3,0" DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" >
+
+            </chartingToolkit:LineSeries>
             
+            <chartingToolkit:Chart.Axes>
+                <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="9000"/>
+            </chartingToolkit:Chart.Axes>
+        </chartingToolkit:Chart>
+
 
 
     </Grid>

@@ -4,6 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
+
 namespace Microsoft.Samples.Kinect.DepthBasics
 {
     using System;
@@ -17,6 +18,8 @@ namespace Microsoft.Samples.Kinect.DepthBasics
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
     using System.Collections.ObjectModel;
+    using System.Collections.Generic;
+    
     /// check updated
     /// <summary>
     /// Interaction logic for MainWindow
@@ -48,7 +51,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// Bitmap to display
         /// </summary>
         private WriteableBitmap depthBitmap = null;
-
+        
         /// <summary>
         /// Intermediate storage for frame data converted to color
         /// </summary>
@@ -62,6 +65,9 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// <summary>
         /// Initializes a new instance of the MainWindow class.
         /// </summary>
+        /// 
+
+
         public MainWindow()
         {
             // get the kinectSensor object
@@ -97,6 +103,9 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
+
+         
+
                 
         }
 
@@ -297,15 +306,22 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
         private unsafe void TextGenerate(ushort* ProcessData)
         {
-            
+   
+            List<KeyValuePair<string,ushort>> MyValue = new List<KeyValuePair<string,ushort>>();
             Point p = this.Viewbox1.PointToScreen(new Point(0,0));
             double mouse_x = System.Windows.Forms.Control.MousePosition.X - p.X;
             double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y - 1;
             string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
+            for (int i = 0; i < 5; i++)  //horizonal test
+            {
+                ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x) + i] : (ushort)9000;
+                MyValue.Add(new KeyValuePair<string, ushort>((mouse_x + i).ToString(), Value));
+                    
+            }
 
-            ushort Value = Viewbox1.IsMouseOver ?  ProcessData[(int)(mouse_y * this.depthFrameDescription.Width+ mouse_x)] : (ushort)9000;
-            this.StatusText = Resolution + CursorLocation + " " + Value.ToString();
+            this.DepthChart.DataContext = MyValue;
+            this.StatusText = Resolution + CursorLocation + " ";
         }
     }
 }
