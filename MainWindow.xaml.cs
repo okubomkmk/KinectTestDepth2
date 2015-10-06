@@ -31,6 +31,8 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// </summary>
         private const int MapDepthToByte = 8000 / 256;
 
+        private int counter = 0;
+        private int fps_graph = 5;
         
         /// <summary>
         /// Active Kinect sensor
@@ -313,14 +315,24 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y - 1;
             string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
-            for (int i = 0; i < 5; i++)  //horizonal test
+            if (counter % (int)(30 / fps_graph) == 0)
             {
-                ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x) + i] : (ushort)9000;
-                MyValue.Add(new KeyValuePair<string, ushort>((mouse_x + i).ToString(), Value));
-                    
+                for (int i = 0; i < 5; i++)  //horizonal test
+                {
+                    ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x) + i] : (ushort)9000;
+                    MyValue.Add(new KeyValuePair<string, ushort>((mouse_x + i).ToString(), Value));
+                }
+
+                this.DepthChart.DataContext = MyValue;
+                counter = 0;
+            }
+            else
+            {
+                ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x)] : (ushort)9000;
+
             }
 
-            this.DepthChart.DataContext = MyValue;
+            counter++;
             this.StatusText = Resolution + CursorLocation + " ";
         }
     }

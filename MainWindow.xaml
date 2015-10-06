@@ -19,11 +19,16 @@
             <chartingToolkit:LineSeries Name="DepthChart" Margin="0,0,-3,0" DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" >
 
             </chartingToolkit:LineSeries>
-            
+
             <chartingToolkit:Chart.Axes>
                 <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="9000"/>
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
+        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="51" Margin="620,444,0,0" VerticalAlignment="Top" Width="135">
+            <RadioButton Content="RadioButton" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </GroupBox>
+        
+
 
 
 
