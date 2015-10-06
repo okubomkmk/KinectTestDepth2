@@ -16,6 +16,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
     using Microsoft.Kinect;
+    using System.Collections.ObjectModel;
     /// check updated
     /// <summary>
     /// Interaction logic for MainWindow
@@ -26,6 +27,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         /// Map depth range to byte range
         /// </summary>
         private const int MapDepthToByte = 8000 / 256;
+
         
         /// <summary>
         /// Active Kinect sensor
@@ -95,8 +97,6 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
-
-
                 
         }
 
@@ -305,10 +305,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
 
             ushort Value = Viewbox1.IsMouseOver ?  ProcessData[(int)(mouse_y * this.depthFrameDescription.Width+ mouse_x)] : (ushort)9000;
-
-            this.StatusText = Resolution + CursorLocation + " "+Value.ToString();
-  
-           
+            this.StatusText = Resolution + CursorLocation + " " + Value.ToString();
         }
     }
 }
