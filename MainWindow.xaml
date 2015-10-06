@@ -24,9 +24,7 @@
                 <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="9000"/>
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
-        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="51" Margin="620,444,0,0" VerticalAlignment="Top" Width="135">
-            <RadioButton Content="RadioButton" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        </GroupBox>
+
         
 
 
