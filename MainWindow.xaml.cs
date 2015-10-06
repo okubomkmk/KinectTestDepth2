@@ -32,8 +32,10 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         private const int MapDepthToByte = 8000 / 256;
 
         private int counter = 0;
-        private int fps_graph = 5;
-        
+        private int fps_graph = 1;
+        private bool cursol_locked = true;
+        private Point p = new Point();
+        private getPointLocation mouse = new getPointLocation();
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -103,12 +105,13 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             // use the window object as the view model in this simple example
             this.DataContext = this;
 
+
+
             // initialize the components (controls) of the window
             this.InitializeComponent();
+            this.Xcheck.IsEnabled = false;
+            this.Ycheck.IsEnabled = false;
 
-         
-
-                
         }
 
         /// <summary>
@@ -308,32 +311,100 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
         private unsafe void TextGenerate(ushort* ProcessData)
         {
-   
-            List<KeyValuePair<string,ushort>> MyValue = new List<KeyValuePair<string,ushort>>();
-            Point p = this.Viewbox1.PointToScreen(new Point(0,0));
-            double mouse_x = System.Windows.Forms.Control.MousePosition.X - p.X;
-            double mouse_y = System.Windows.Forms.Control.MousePosition.Y - p.Y - 1;
-            string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
-            string CursorLocation = Viewbox1.IsMouseOver ? " Cursor Location " +(mouse_x.ToString() + " " + mouse_y.ToString()) : "out of image";
-            if (counter % (int)(30 / fps_graph) == 0)
+            p = this.Viewbox1.PointToScreen(new Point(0, 0));
+            getPointLocation mouseInPicture = new getPointLocation(p);
+            if (cursol_locked)
             {
-                for (int i = 0; i < 5; i++)  //horizonal test
+                mouseInPicture = mouse;
+            }
+ 
+            string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
+            string CursorLocation;
+            ushort Value;
+            if (Viewbox1.IsMouseOver)
+            {
+                if (counter % (int)(30 / fps_graph) == 0)
                 {
-                    ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x) + i] : (ushort)9000;
-                    MyValue.Add(new KeyValuePair<string, ushort>((mouse_x + i).ToString(), Value));
+                    graphGenerateHorizonal(ProcessData, mouseInPicture);
                 }
-
-                this.DepthChart.DataContext = MyValue;
-                counter = 0;
+                
+                CursorLocation = " Cursor Location " + (mouseInPicture.X.ToString() + " " + mouseInPicture.Y.ToString());
+                Value = shiburinkawaiiyoo(ProcessData, mouseInPicture.X, mouseInPicture.Y);
             }
             else
             {
-                ushort Value = Viewbox1.IsMouseOver ? ProcessData[(int)(mouse_y * this.depthFrameDescription.Width + mouse_x)] : (ushort)9000;
+                CursorLocation = "out of image";
+                Value = 9000;
+            }
+            counter++;
+            this.StatusText = Resolution + CursorLocation + " cursor lock is " + cursol_locked.ToString() + " " + Value.ToString();
+        }
+        
+        private unsafe ushort shiburinkawaiiyoo(ushort* ProcessData, double X,double Y)
+        {
+            return ProcessData[(int)(Y * this.depthFrameDescription.Width + X)];
+        }
 
+        private unsafe void graphGenerateHorizonal(ushort* ProcessData, getPointLocation location)
+        {
+            int horizonal_length = 2;
+            List<KeyValuePair<string, ushort>> MyValue = new List<KeyValuePair<string, ushort>>();
+            if (!((bool)this.AllX.IsChecked))
+            {
+                for (int i = -horizonal_length; i <= horizonal_length; i++)  //horizonal test
+                {
+                    if (0 <= (location.X + i) || (location.X + i) < this.depthBitmap.Width)
+                    {
+                        ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X + i, location.Y);
+                        MyValue.Add(new KeyValuePair<string, ushort>((location.X + i).ToString(), ValueTemp));
+                    }
+
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.depthBitmap.Width; i++)  //horizonal test
+                {
+                    ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X + i, location.Y);
+                    MyValue.Add(new KeyValuePair<string, ushort>((location.X + i).ToString(), ValueTemp));
+                }
             }
 
-            counter++;
-            this.StatusText = Resolution + CursorLocation + " ";
+            this.DepthChart.DataContext = MyValue;
+            counter = 1;
+        }
+
+        private unsafe void graphGenerateVertial(ushort* ProcessData, getPointLocation location)
+        {
+            int vertial_length = 2;
+            List<KeyValuePair<string, ushort>> MyValue = new List<KeyValuePair<string, ushort>>();
+
+            
+            for (int i = -vertial_length; i <= vertial_length; i++)  //horizonal test
+            {
+                if(0<=(location.Y +i) || (location.Y + i)<this.depthBitmap.Height)
+                {
+                    ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X, location.Y + i);
+                    MyValue.Add(new KeyValuePair<string, ushort>((location.Y + i).ToString(), ValueTemp));
+                }
+                
+            }
+
+            this.DepthChart.DataContext = MyValue;
+            counter = 1;
+        }
+
+        private void Viewbox1_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            getPointLocation temp = new getPointLocation(this.Viewbox1.PointToScreen(new Point(0, 0)));
+
+            if (cursol_locked)
+            {
+                mouse = temp;
+            }
+            cursol_locked = !cursol_locked;
+            this.Xcheck.IsEnabled = !this.Xcheck.IsEnabled;
+            this.Ycheck.IsEnabled = !this.Ycheck.IsEnabled;
         }
     }
 }

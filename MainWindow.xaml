@@ -6,16 +6,20 @@
         Height="672" Width="1144" 
         Closing="MainWindow_Closing">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="295*"/>
+            <ColumnDefinition Width="841*"/>
+        </Grid.ColumnDefinitions>
 
-        <Viewbox HorizontalAlignment="Left" Height="424" Margin="20,20,0,0" VerticalAlignment="Top" Width="512" x:Name="Viewbox1">
+        <Viewbox HorizontalAlignment="Left" Height="424" Margin="20,20,0,0" VerticalAlignment="Top" Width="512" x:Name="Viewbox1" MouseLeftButtonDown="Viewbox1_MouseLeftButtonDown" Grid.ColumnSpan="2">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill"/>
         </Viewbox>
-        <StatusBar HorizontalAlignment="Left" Height="25" Margin="20,470,0,0" VerticalAlignment="Top" Width="490">
+        <StatusBar HorizontalAlignment="Left" Height="25" Margin="20,470,0,0" VerticalAlignment="Top" Width="490" Grid.ColumnSpan="2">
             <StatusBarItem Content="{Binding StatusText}"/>
         </StatusBar>
 
 
-        <chartingToolkit:Chart HorizontalAlignment="Left" Height="380" Margin="570,20,0,0" VerticalAlignment="Top" Width="546" >
+        <chartingToolkit:Chart HorizontalAlignment="Left" Height="380" Margin="275,20,0,0" VerticalAlignment="Top" Width="546" Grid.Column="1" >
             <chartingToolkit:LineSeries Name="DepthChart" Margin="0,0,-3,0" DependentValuePath="Value" IndependentValuePath="Key" ItemsSource="{Binding}" >
 
             </chartingToolkit:LineSeries>
@@ -24,8 +28,13 @@
                 <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="9000"/>
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
+        <CheckBox Content="Horizonal(X)" HorizontalAlignment="Left" Height="19" Margin="345,425,0,0" VerticalAlignment="Top" Width="100" Name="Xcheck" Grid.Column="1"/>
+        <CheckBox Content="Vertial(Y)" HorizontalAlignment="Left" Height="20" Margin="345,449,0,0" VerticalAlignment="Top" Width="80" Name="Ycheck" Grid.Column="1"/>
+        <CheckBox Content="All" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="470,425,0,0" VerticalAlignment="Top" Width="130" Name="AllX"/>
+        <CheckBox Content="All" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="470,449,0,0" VerticalAlignment="Top" Width="130" Name="AllY"/>
 
-        
+
+
 
 
 
