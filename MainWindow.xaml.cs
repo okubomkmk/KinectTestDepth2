@@ -36,6 +36,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         private bool cursol_locked = true;
         private Point p = new Point();
         private getPointLocation mouse = new getPointLocation();
+        private List<KeyValuePair<string, ushort>> MyTimeValue = new List<KeyValuePair<string, ushort>>();
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -325,11 +326,13 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             {
                 if (counter % (int)(30 / fps_graph) == 0)
                 {
-                    graphGenerateHorizonal(ProcessData, mouseInPicture);
+                    //graphGenerateHorizonal(ProcessData, mouseInPicture);
+                    graphGenerateTimeDomain(ProcessData, mouseInPicture);
+                   
                 }
                 
                 CursorLocation = " Cursor Location " + (mouseInPicture.X.ToString() + " " + mouseInPicture.Y.ToString());
-                Value = shiburinkawaiiyoo(ProcessData, mouseInPicture.X, mouseInPicture.Y);
+                Value = shiburinkawaiiyoo(ProcessData, mouseInPicture);
             }
             else
             {
@@ -343,6 +346,10 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         private unsafe ushort shiburinkawaiiyoo(ushort* ProcessData, double X,double Y)
         {
             return ProcessData[(int)(Y * this.depthFrameDescription.Width + X)];
+        }
+        private unsafe ushort shiburinkawaiiyoo(ushort* ProcessData, getPointLocation location)
+        {
+            return ProcessData[(int)(location.Y * this.depthFrameDescription.Width + location.X)];
         }
 
         private unsafe void graphGenerateHorizonal(ushort* ProcessData, getPointLocation location)
@@ -405,6 +412,13 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             cursol_locked = !cursol_locked;
             this.Xcheck.IsEnabled = !this.Xcheck.IsEnabled;
             this.Ycheck.IsEnabled = !this.Ycheck.IsEnabled;
+        }
+
+        private unsafe void graphGenerateTimeDomain(ushort* ProcessData, getPointLocation location)
+        {
+            ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X,location.Y);
+            MyTimeValue.Add(new KeyValuePair<string, ushort>(counter.ToString(), ValueTemp));
+            this.DepthChart.DataContext = MyTimeValue;
         }
     }
 }
