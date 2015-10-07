@@ -32,11 +32,14 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         private const int MapDepthToByte = 8000 / 256;
 
         private int counter = 0;
+        private int writeDownedCounter = 0;
         private int fps_graph = 1;
         private bool cursol_locked = true;
         private Point p = new Point();
+        private DateTime dtnow =DateTime.Now;
         private getPointLocation mouse = new getPointLocation();
         private List<KeyValuePair<string, ushort>> MyTimeValue = new List<KeyValuePair<string, ushort>>();
+        private System.IO.StreamWriter writingSw = new System.IO.StreamWriter(@"C:\Users\mkuser\Documents\test.txt", true, System.Text.Encoding.GetEncoding("shift_jis"));
         /// <summary>
         /// Active Kinect sensor
         /// </summary>
@@ -112,7 +115,9 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             this.InitializeComponent();
             this.Xcheck.IsEnabled = false;
             this.Ycheck.IsEnabled = false;
-
+            this.WriteDown.IsEnabled = false;
+            writingSw.Write("\nopened " + dtnow.ToString() + "\n");
+            
         }
 
         /// <summary>
@@ -175,6 +180,8 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                 this.kinectSensor.Close();
                 this.kinectSensor = null;
             }
+            writingSw.Write("\n"+dtnow.ToString() + " closed\n");
+            writingSw.Close();
         }
 
         /// <summary>
@@ -312,35 +319,44 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
         private unsafe void TextGenerate(ushort* ProcessData)
         {
+
+            string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
+            string CursorLocation;
+            ushort Value;            
             p = this.Viewbox1.PointToScreen(new Point(0, 0));
             getPointLocation mouseInPicture = new getPointLocation(p);
+            
             if (cursol_locked)
             {
                 mouseInPicture = mouse;
-            }
- 
-            string Resolution = "Resolution " + this.depthFrameDescription.Width.ToString() + "x" + this.depthFrameDescription.Height.ToString();
-            string CursorLocation;
-            ushort Value;
-            if (Viewbox1.IsMouseOver)
-            {
-                if (counter % (int)(30 / fps_graph) == 0)
+                if ((bool)(this.WriteDown.IsChecked))
                 {
-                    //graphGenerateHorizonal(ProcessData, mouseInPicture);
-                    graphGenerateTimeDomain(ProcessData, mouseInPicture);
-                   
+                    writeToText(ProcessData, mouseInPicture);
                 }
-                
                 CursorLocation = " Cursor Location " + (mouseInPicture.X.ToString() + " " + mouseInPicture.Y.ToString());
                 Value = shiburinkawaiiyoo(ProcessData, mouseInPicture);
+                  
             }
             else
             {
-                CursorLocation = "out of image";
-                Value = 9000;
+                if (Viewbox1.IsMouseOver)
+                {
+                    CursorLocation = " Cursor Location " + (mouseInPicture.X.ToString() + " " + mouseInPicture.Y.ToString());
+                    Value = shiburinkawaiiyoo(ProcessData, mouseInPicture);
+                }
+                else
+                {
+                    CursorLocation = "out of image";
+                    Value = 9000;
+                    if (counter % (int)(30 / fps_graph) == 0)
+                    {
+                        //graphGenerateHorizonal(ProcessData, mouseInPicture);
+                        //graphGenerateTimeDomain(ProcessData, mouseInPicture);
+                    }
+                }
             }
-            counter++;
-            this.StatusText = Resolution + CursorLocation + " cursor lock is " + cursol_locked.ToString() + " " + Value.ToString();
+
+            this.StatusText = Resolution + CursorLocation + " cursor lock is " + cursol_locked.ToString() + " " + Value.ToString() + " Writing is " +WriteDown.IsChecked.ToString() + " Writed sample number =" + writeDownedCounter.ToString();
         }
         
         private unsafe ushort shiburinkawaiiyoo(ushort* ProcessData, double X,double Y)
@@ -409,9 +425,11 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             {
                 mouse = temp;
             }
+
             cursol_locked = !cursol_locked;
-            this.Xcheck.IsEnabled = !this.Xcheck.IsEnabled;
-            this.Ycheck.IsEnabled = !this.Ycheck.IsEnabled;
+            this.Xcheck.IsEnabled = cursol_locked;
+            this.Ycheck.IsEnabled = cursol_locked;
+            this.WriteDown.IsEnabled = cursol_locked;
         }
 
         private unsafe void graphGenerateTimeDomain(ushort* ProcessData, getPointLocation location)
@@ -419,6 +437,13 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X,location.Y);
             MyTimeValue.Add(new KeyValuePair<string, ushort>(counter.ToString(), ValueTemp));
             this.DepthChart.DataContext = MyTimeValue;
+        }
+
+        private unsafe void writeToText(ushort* ProcessData, getPointLocation location)
+        {
+            ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X, location.Y);
+            writingSw.Write(ValueTemp.ToString() + ",");
+            writeDownedCounter++;
         }
     }
 }
