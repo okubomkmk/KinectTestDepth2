@@ -36,7 +36,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         private int fps_graph = 1;
         private bool cursol_locked = true;
         private Point p = new Point();
-        private DateTime dtnow =DateTime.Now;
+        private DateTime dtnow;
         private getPointLocation mouse = new getPointLocation();
         private List<KeyValuePair<string, ushort>> MyTimeValue = new List<KeyValuePair<string, ushort>>();
         private System.IO.StreamWriter writingSw = new System.IO.StreamWriter(@"C:\Users\mkuser\Documents\test.txt", true, System.Text.Encoding.GetEncoding("shift_jis"));
@@ -113,9 +113,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
 
             // initialize the components (controls) of the window
             this.InitializeComponent();
-            this.Xcheck.IsEnabled = false;
-            this.Ycheck.IsEnabled = false;
-            this.WriteDown.IsEnabled = false;
+            this.CheckWriteDown.IsEnabled = false;
             writingSw.Write("\nopened " + dtnow.ToString() + "\n");
             
         }
@@ -199,7 +197,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
         {
             bool depthFrameProcessed = false;
 
-            using (DepthFrame depthFrame = e.FrameReference.AcquireFrame())
+            using (DepthFrame depthFrame = e.FrameReference.AcquireFrame()) //こいつを調べる
             {
                 if (depthFrame != null)
                 {
@@ -213,7 +211,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                         {
                             // Note: In order to see the full range of depth (including the less reliable far field depth)
                             // we are setting maxDepth to the extreme potential depth threshold
-                            ushort maxDepth = ushort.MaxValue;
+                            ushort maxDepth = ushort.MaxValue; // ushort.MaxValue is 65535
 
                             // If you wish to filter by reliable depth distance, uncomment the following line:
                             //// maxDepth = depthFrame.DepthMaxReliableDistance
@@ -224,7 +222,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                     }
                 }
             }
-
+            
             if (depthFrameProcessed)
             {
                 this.RenderDepthPixels();
@@ -296,7 +294,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             if (cursol_locked)
             {
                 mouseInPicture = mouse;
-                if ((bool)(this.WriteDown.IsChecked))
+                if ((bool)(this.CheckWriteDown.IsChecked))
                 {
                     writeToText(ProcessData, mouseInPicture);
                 }
@@ -323,7 +321,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
                 }
             }
 
-            this.StatusText = Resolution + CursorLocation + " cursor lock is " + cursol_locked.ToString() + " " + Value.ToString() + " Writing is " +WriteDown.IsChecked.ToString() + " Writed sample number =" + writeDownedCounter.ToString();
+            this.StatusText = Resolution + CursorLocation + " cursor lock is " + cursol_locked.ToString() + " " + Value.ToString() + " Writing is " +CheckWriteDown.IsChecked.ToString() + " Writed sample number =" + writeDownedCounter.ToString();
         }
         
         private unsafe ushort shiburinkawaiiyoo(ushort* ProcessData, double X,double Y)
@@ -335,55 +333,7 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             return ProcessData[(int)(location.Y * this.depthFrameDescription.Width + location.X)];
         }
 
-        private unsafe void graphGenerateHorizonal(ushort* ProcessData, getPointLocation location)
-        {
-            int horizonal_length = 2;
-            List<KeyValuePair<string, ushort>> MyValue = new List<KeyValuePair<string, ushort>>();
-            if (!((bool)this.AllX.IsChecked))
-            {
-                for (int i = -horizonal_length; i <= horizonal_length; i++)  //horizonal test
-                {
-                    if (0 <= (location.X + i) || (location.X + i) < this.depthBitmap.Width)
-                    {
-                        ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X + i, location.Y);
-                        MyValue.Add(new KeyValuePair<string, ushort>((location.X + i).ToString(), ValueTemp));
-                    }
-
-                }
-            }
-            else
-            {
-                for (int i = 0; i < this.depthBitmap.Width; i++)  //horizonal test
-                {
-                    ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X + i, location.Y);
-                    MyValue.Add(new KeyValuePair<string, ushort>((location.X + i).ToString(), ValueTemp));
-                }
-            }
-
-            this.DepthChart.DataContext = MyValue;
-            counter = 1;
-        }
-
-        private unsafe void graphGenerateVertial(ushort* ProcessData, getPointLocation location)
-        {
-            int vertial_length = 2;
-            List<KeyValuePair<string, ushort>> MyValue = new List<KeyValuePair<string, ushort>>();
-
-            
-            for (int i = -vertial_length; i <= vertial_length; i++)  //horizonal test
-            {
-                if(0<=(location.Y +i) || (location.Y + i)<this.depthBitmap.Height)
-                {
-                    ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X, location.Y + i);
-                    MyValue.Add(new KeyValuePair<string, ushort>((location.Y + i).ToString(), ValueTemp));
-                }
-                
-            }
-
-            this.DepthChart.DataContext = MyValue;
-            counter = 1;
-        }
-
+ 
         private void Viewbox1_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             getPointLocation temp = new getPointLocation(this.Viewbox1.PointToScreen(new Point(0, 0)));
@@ -394,16 +344,8 @@ namespace Microsoft.Samples.Kinect.DepthBasics
             }
 
             cursol_locked = !cursol_locked;
-            this.Xcheck.IsEnabled = cursol_locked;
-            this.Ycheck.IsEnabled = cursol_locked;
-            this.WriteDown.IsEnabled = cursol_locked;
-        }
 
-        private unsafe void graphGenerateTimeDomain(ushort* ProcessData, getPointLocation location)
-        {
-            ushort ValueTemp = shiburinkawaiiyoo(ProcessData, location.X,location.Y);
-            MyTimeValue.Add(new KeyValuePair<string, ushort>(counter.ToString(), ValueTemp));
-            this.DepthChart.DataContext = MyTimeValue;
+            this.CheckWriteDown.IsEnabled = cursol_locked;
         }
 
         private unsafe void writeToText(ushort* ProcessData, getPointLocation location)

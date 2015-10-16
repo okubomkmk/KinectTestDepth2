@@ -28,10 +28,9 @@
                 <chartingToolkit:LinearAxis Orientation="Y" Minimum="0" Maximum="9000"/>
             </chartingToolkit:Chart.Axes>
         </chartingToolkit:Chart>
-        <CheckBox Content="Horizonal(X)" HorizontalAlignment="Left" Height="19" Margin="345,425,0,0" VerticalAlignment="Top" Width="100" Name="Xcheck" Grid.Column="1"/>
-        <CheckBox Content="Vertial(Y)" HorizontalAlignment="Left" Height="20" Margin="345,449,0,0" VerticalAlignment="Top" Width="80" Name="Ycheck" Grid.Column="1"/>
-        <CheckBox Content="All" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="470,425,0,0" VerticalAlignment="Top" Width="130" Name="AllX"/>
-        <CheckBox Content="WriteDown" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="470,449,0,0" VerticalAlignment="Top" Width="130" Name="WriteDown"/>
+        <CheckBox Content="WriteDown" Grid.Column="1" HorizontalAlignment="Left" Height="20" Margin="470,449,0,0" VerticalAlignment="Top" Width="130" Name="CheckWriteDown"/>
+        
+        <CheckBox Content="LockCenter" Grid.Column="1" HorizontalAlignment="Left" Height="21" Margin="336,449,0,0" VerticalAlignment="Top" Width="194" Name="CheckLockCenter"/>
 
 
 
